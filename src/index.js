@@ -42,6 +42,7 @@ async function run() {
         }
 
     } catch (error) {
+        core.info('Failing here')
         core.setFailed(error.message);
     }
 }
