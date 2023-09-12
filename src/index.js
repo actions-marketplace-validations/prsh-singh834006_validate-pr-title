@@ -7,7 +7,7 @@ const valide_pr_regex = '(feature|fix|build|release|hotfix)/((RCRA|CML|EDR|PTS)-
 
 async function run() {
     try {
-        const authToken = core.getInput('github_token', {required: true})
+        const authToken = core.getInput('GITHUB_TOKEN', {required: true})
 
         const eventName = github.context.eventName;
 
@@ -35,7 +35,7 @@ async function run() {
         core.info(`Pull Request title: "${title}"`);
 
         const regex = RegExp(valide_pr_regex);
-        
+
         if (!regex.test(title)) {
             core.setFailed(`Pull Request title "${title}" failed to pass match regex - ${regex}`);
             return
