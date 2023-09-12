@@ -20,13 +20,13 @@ async function run() {
 
         const owner = github.context.payload.pull_request.base.user.login;
 
-        const repository = github.context.payload.pull_request.base.repo.name;
+        const repo = github.context.payload.pull_request.base.repo.name;
 
         const client = new github.getOctokit(authToken);
 
         const {data: pullRequest} = await client.rest.pulls.get({
           owner,
-          repository,
+          repo,
           pull_number: github.context.payload.pull_request.number
         });
 
