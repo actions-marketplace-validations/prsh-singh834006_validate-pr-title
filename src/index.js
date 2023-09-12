@@ -9,15 +9,13 @@ const CONFIG = {
 
 const validEvent = ['pull_request'];
 
-const valide_pr_regex = '(feature|fix|build|release|hotfix)/((RCRA|CML|EDR|PTS)-[0-9])'
-
 async function run() {
     try {
-        const authToken = core.getInput('GITHUB_TOKEN', {required: true})
+        const authToken = core.getInput('GITHUB_TOKEN', { required: true })
 
         const eventName = github.context.eventName;
 
-        core.info(`Event name: ${eventName}`);
+        core.info(`Event: ${eventName}`);
 
         if (validEvent.indexOf(eventName) < 0) {
             core.setFailed(`Invalid event: ${eventName}`);
@@ -30,7 +28,7 @@ async function run() {
 
         const client = new github.getOctokit(authToken);
 
-        const {data: pullRequest} = await client.rest.pulls.get({
+        const { data: pullRequest } = await client.rest.pulls.get({
           owner,
           repo,
           pull_number: github.context.payload.pull_request.number
@@ -38,16 +36,16 @@ async function run() {
 
         const title = pullRequest.title;
         
-        core.info(`Pull Request title: "${title}"`);
+        core.info(`PR Title: "${title}"`);
 
-        const { valid } = await load(CONFIG).then((options) => lint(title, options.rules, options.parserPreset ? {parserOpts: options.parserPreset.parserOpts} : {}))
+        const options =  await load(CONFIG)
 
+        const { valid } = await lint(title, options.rules, options.parserPreset ? { parserOpts: options.parserPreset.parserOpts } : {})
+        
         if (!valid) {
             core.setFailed(`Pull Request title "${title}" doesn't match conventional commit message`);
             return
         }
-
-        console.log('passing')
 
     } catch (error) {
         core.setFailed(error.message);
