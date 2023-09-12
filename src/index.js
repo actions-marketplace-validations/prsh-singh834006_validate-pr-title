@@ -1,11 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const lint = require('@commitlint/lint').default;
-const load = require('@commitlint/load').default;
 
-const CONFIG = {
-  extends: ['@commitlint/config-conventional'],
-};
+const REGEX_PATTERN = '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)'
 
 const validEvent = ['pull_request'];
 
@@ -37,17 +33,15 @@ async function run() {
         const title = pullRequest.title;
         
         core.info(`PR Title: "${title}"`);
-
-        const options =  await load(CONFIG)
-
-        const { valid } = await lint(title, options.rules, options.parserPreset ? { parserOpts: options.parserPreset.parserOpts } : {})
         
-        if (!valid) {
-            core.setFailed(`Pull Request title "${title}" doesn't match conventional commit message`);
+        const regex = RegExp(REGEX_PATTERN)
+
+        if (!regex.test(title)) {
+            core.setFailed(`Pull Request title "}" doesn't match conventional commit message`);
             return
         }
 
-    } catch (error: any) {
+    } catch (error) {
         core.setFailed(error.message);
     }
 }
