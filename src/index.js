@@ -1,5 +1,11 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const lint = require('@commitlint/lint').default;
+const load = require('@commitlint/load').default;
+
+const CONFIG = {
+  extends: ['@commitlint/config-conventional'],
+};
 
 const validEvent = ['pull_request'];
 
@@ -34,15 +40,16 @@ async function run() {
         
         core.info(`Pull Request title: "${title}"`);
 
-        const regex = RegExp(valide_pr_regex);
+        const { valid } = await load(CONFIG).then((options) => lint(title, options.rules, options.parserPreset ? {parserOpts: options.parserPreset.parserOpts} : {}))
 
-        if (!regex.test(title)) {
-            core.setFailed(`Pull Request title "${title}" failed to pass match regex - ${regex}`);
+        if (!valid) {
+            core.setFailed(`Pull Request title "${title}" doesn't match conventional commit message`);
             return
         }
 
+        console.log('passing')
+
     } catch (error) {
-        core.info('Failing here')
         core.setFailed(error.message);
     }
 }
