@@ -1,0 +1,8 @@
+name: 'Validate PR Tile'
+description: 'Github action to enforce Pull Request title conventions'
+author: 'Prashant Kumar'
+
+inputs:
+  GITHUB_TOKEN:
+    description: 'Github Token'
+    required: true
