@@ -1,6 +1,7 @@
 {
   "name": "validate-pr-title",
   "version": "1.0.0",
+  "type": "module",
   "description": "Github action to validate PR title",
   "main": "src/index.js",
   "scripts": {
