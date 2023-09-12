@@ -16,4 +16,4 @@ jobs:
       - name: Validate
         uses: ./
         with:
-          github_token: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
