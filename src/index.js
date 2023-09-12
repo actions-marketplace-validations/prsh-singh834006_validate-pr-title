@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-const REGEX_PATTERN = '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)'
+const REGEX_PATTERN = /^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([\w\-\.]+\))?(!)?: ([\w ])+([\s\S]*)/i
 
 const validEvent = ['pull_request'];
 
@@ -34,10 +34,9 @@ async function run() {
         
         core.info(`PR Title: "${title}"`);
         
-        const regex = RegExp(REGEX_PATTERN)
-
-        if (!regex.test(title)) {
-            core.setFailed(`Pull Request title "}" doesn't match conventional commit message`);
+   
+        if (!REGEX_PATTERN.test(title)) {
+            core.setFailed(`Pull Request title "${title}" doesn't match conventional commit message`);
             return
         }
 
