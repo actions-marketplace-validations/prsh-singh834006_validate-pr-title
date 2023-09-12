@@ -2,7 +2,7 @@
 
 This action is an open pull request.
 
-## Configuration with With
+## Configuration with
 
 The following settings must be passed as environment variables as shown in the
 example.
