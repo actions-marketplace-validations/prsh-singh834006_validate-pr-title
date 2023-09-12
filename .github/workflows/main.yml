@@ -14,5 +14,6 @@ jobs:
           node-version: '10.x'
       - run: npm install
       - name: Validate
+        uses: ./
         with:
           github_token: ${{ github.token }}
