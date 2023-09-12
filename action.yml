@@ -6,7 +6,8 @@ inputs:
   GITHUB_TOKEN:
     description: 'Github Token'
     required: true
-  
+    default: ${{ github.token }}
+
 runs:
   using: 'node16'
   main: 'src/index.js'
